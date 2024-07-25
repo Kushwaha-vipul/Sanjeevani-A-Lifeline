@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import PatientNav from "./PatientNav";
 import { Popover, Typography } from "@mui/material";
 import axios from "axios";
-import { useGetProfileQuery } from "../../app/features/patient/PatientApiSlice";
+// import { useGetProfileQuery } from "../../app/features/patient/PatientApiSlice";
 import { useSelector } from "react-redux";
 
 function PatientDetails() {

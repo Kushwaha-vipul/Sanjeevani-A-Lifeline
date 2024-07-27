@@ -6,7 +6,7 @@ const User = require("../../models/patient/user.js");
 const AppointmentD = require("../../models/connection/appointments.js");
 const AppointmentP = require("../../models/connection/appointments.js");
 const Review = require("../../models/connection/reviews.js");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt=require("jsonwebtoken");
 
 const loginPatient= async(req,res,next)=>{
@@ -16,27 +16,29 @@ const loginPatient= async(req,res,next)=>{
   if (!user) return res.status(404).send("User not found")
    
 
-  const isCorrect = bcrypt.compareSync(req.body.password, user.password);
-  console.log(isCorrect);
-  if (!isCorrect)
+  const isCorrect =await  bcrypt.compare(req.body.password, user.password);
+console.log("Password Comparison Result:", isCorrect);
+  if (!isCorrect){
+    console.log("Password would be wrong");
     return res.status(400).send("Password would be wrong");
-
+}
   const token = jwt.sign(
     {
       id: user._id,
       // isSeller: user.isSeller,
-      isDoctor:user.doctor,
+      isDoctor:user.doctor
     },
-    'abc123',
+    process.env.JWT_SECRET||'abc123',
+    {expiresIn:'1h'}
   );
-  console.log(token);
-  console.log(66)
+  console.log("Genertated Token:", token);
+
   const { password, ...info } = user._doc;
   res
     .cookie("accessToken", token, {
       httpOnly: true,
       secure: true,
-      
+      sameSite:'none',
     })
     
     return res.status(200).json({ ...info, token });
@@ -48,8 +50,8 @@ const loginPatient= async(req,res,next)=>{
 
 const signup = async (req, res, next) => {
   try {
-    const hash = bcrypt.hashSync(req.body.password, 5);
-    console.log(hash);
+    const hash =await bcrypt.hash(req.body.password, 10);
+    console.log("Generated Hash:", hash);
     const newUser = new User({
       ...req.body,
       password: hash,
@@ -110,7 +112,7 @@ const reviewProfile = asyncHandler(async (req, res) => {
 
     // Find the doctor by id
     let doctor = await Review.findOne({ doctorId: doctorId });
-    let itexist = await Doctor.findOne({ username: doctorId });
+    let itexist = await doctor.findOne({ username: doctorId });
     console.log(itexist);
 
     if (!doctor && itexist) {
@@ -228,7 +230,7 @@ module.exports = {
   updateUserProfile,
   reviewProfile,
   addPatientToDoctor,
-  getAppointmentP,
-  reviewProfile,
+ 
+ 
   getAppointmentP
 };

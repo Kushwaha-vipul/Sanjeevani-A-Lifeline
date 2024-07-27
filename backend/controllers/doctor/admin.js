@@ -8,46 +8,6 @@ const Review=require("../../models/connection/reviews.js")
 const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken");
 
-// const authDoctor = asyncHandler(async (req,res)=>{
-//     try {
-//         const { username, password } = req.body;
-//         const user = await Doctor.findOne({ username });
-//         if (!user) return res.status(404).json({ mssg: "Not found" });
-    
-//         const isMatch = await user.matchPassword(password);
-    
-//         console.log(isMatch);
-    
-//         if (isMatch) {
-//           const token = generateToken(res, user._id);
-//           res.json({
-//             token,
-//           });
-//         } else {
-//           res.status(400).json({ error: "Password not matched" });
-//         }
-//       } catch (err) {
-//         res.status(401).json({ error: err.message });
-//       }
-// });
-
-// const signup = asyncHandler(async (req, res) => {
-//     try {
-//       const { username, email, password } = req.body;
-//       await Doctor.findOne({ email });
-//       const user = await Doctor.create({
-//         username,
-//         email,
-//         password,
-//       });
-//       const token = generateToken(res, user._id);
-//       res.status(201).json({
-//         token,
-//       });
-//     } catch (err) {
-//       res.status(400).json({ error: err.message });
-//     }
-//   });
 
 const signup = async (req, res, next) => {
   try {

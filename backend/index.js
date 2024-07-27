@@ -1,8 +1,10 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose =require('mongoose');
 // const {connectToDb, getDb} = require('./src/configuration/config')
 // const port = process.env.PORT || 3000;
 const app = express();
+app.use(bodyParser.json());
 const cookieParser=require("cookie-parser")
 // const userRouter=require("../sanjeevani_backend/src/routes/patient/user.js");
 // const doctorRouter=require("../sanjeevani_backend/src/routes/doctor/admin.js");
